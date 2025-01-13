@@ -1,4 +1,4 @@
-# E-Commerce Platform for
+# E-Commerce Platform
 
 This is a full-stack e-commerce application built using **React**, **Tailwind CSS**, **Node.js**, **Express.js** and **MongoDB**. The platform allows users to browse, search, and purchase products, providing a seamless shopping experience.
 
