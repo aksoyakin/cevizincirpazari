@@ -1,6 +1,5 @@
 import Title from "../components/Title.jsx";
 import {assets} from "../assets/assets.js";
-import NewsLetter from "../components/NewsLetter.jsx";
 
 const About = () => {
     return (

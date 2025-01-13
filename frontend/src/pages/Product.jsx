@@ -1,7 +1,6 @@
-import {Link, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {ShopContext} from "../context/ShopContext.jsx";
-import {assets} from "../assets/assets.js";
 import RelatedProducts from "../components/RelatedProducts.jsx";
 import {useNavigate} from "react-router-dom";
 

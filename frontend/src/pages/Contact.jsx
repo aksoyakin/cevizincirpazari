@@ -1,6 +1,5 @@
 import Title from "../components/Title.jsx";
 import {assets} from "../assets/assets.js";
-import Newsletter from "../components/Newsletter.jsx";
 import {Link} from "react-router-dom";
 
 const Contact = () => {
@@ -22,7 +21,6 @@ const Contact = () => {
                     </Link>
                 </div>
             </div>
-            {/*<Newsletter/>*/}
         </div>
     );
 };
