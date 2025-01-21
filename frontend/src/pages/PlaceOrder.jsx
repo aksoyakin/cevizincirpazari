@@ -129,7 +129,7 @@ const PlaceOrder = () => {
                     value={formData.street}
                     className={"border border-gray-300 rounded py-1.5 px-3.5 w-full"}
                     type={"text"}
-                    placeholder={"Sokak"}
+                    placeholder={"Sokak Adı, Bina No, Kapı No"}
                 />
                 <div className={"flex gap-3"}>
                     <input

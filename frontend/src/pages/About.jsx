@@ -10,11 +10,8 @@ const About = () => {
             <div className={"my-10 flex flex-col md:flex-row gap-16"}>
                 <img className={"w-full md:max-w-[450px]"} src={assets.about_img} alt=""/>
                 <div className={"flex flex-col justify-center gap-6 md:w-2/4 text-gray-600"}>
-                    <p>En taze ve kaliteli ceviz ile incir çeşitlerini doğrudan sofranıza getiriyoruz. Bütün ürümlerimiz
-                        doğal yollarla yetiştiriyoruz. Amacımız, sağlıklı yaşamı desteklerken,
-                        her lokmada lezzetli ve doğal bir deneyim sunmaktır.</p>
-                    <b className={"text-gray-800"}>Misyonumuz</b>
-                    <p> Misyonumuz, en taze ve kaliteli ceviz ile incirleri doğal ve sağlıklı bir şekilde sunarak, her müşterimize lezzetli ve besleyici atıştırmalıklar sağlamaktır. Doğadan ilham alarak tamamen doğal ürünlerle sağlıklı yaşamı destekliyoruz. Her adımda sürdürülebilirlik ve kaliteyi ön planda tutarak, taptaze ve lezzetli ürünleri sofralara ulaştırmayı hedefliyoruz.</p>
+                    <p>20 yıllık tecrübe ve kaliteye olan hassasiyetimizle ceviz ve incir çeşitlerimizi doğrudan sizlerle buluşturuyoruz! Misyonumuz sağlıklı yaşamı desteklerken memnuniyet ve kalite odaklı hizmet anlayışıdır.</p>
+                    <p>Babadan kızına 20 yıllık tecrübeyle ana merkezimiz Denizli`nin 1325 m rakımlı Çameli ilçesinin Arıkaya köyünde olup, Türkiye`nin her bölgesine ürünlerimizi kargo yoluyla ulaştırmaktayız. 20 yılı geçkin bir süreyle de Antalya merkez ve Korkuteli ilçesinde doğrudan toptan ve parkende olarak ürün satışlarımızı yapmaktayız. Doğadan ilham alarak kalite ve sürdürülebilirlik anlayışıyla lezzetli ürünlerimizi siz değerli müşterilerimizin sofralarına ulaştırmayı hedefliyoruz</p>
                 </div>
             </div>
             <div className={"text-4xl py-4"}>
