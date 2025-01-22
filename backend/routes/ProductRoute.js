@@ -2,15 +2,16 @@ import express from 'express';
 import {listProducts, addProduct, removeProduct, singleProduct} from '../controllers/ProductController.js';
 import upload from "../middleware/multer.js";
 import adminAuth from "../middleware/AdminAuth.js";
+import uploadImagesWithMulter from "../config/uploadImagesWithMulter.js";
 
 const productRouter = express.Router();
 
-productRouter.post('/add', adminAuth, upload.fields([
+productRouter.post('/add', adminAuth, productRouter.post('/add',  uploadImagesWithMulter.fields([
     {name: 'image1', maxCount: 1},
     {name: 'image2', maxCount: 1},
     {name: 'image3', maxCount: 1},
     {name: 'image4', maxCount: 1}
-]), addProduct);
+]), addProduct));
 productRouter.post('/remove', adminAuth ,removeProduct);
 productRouter.post('/single', singleProduct);
 productRouter.get('/list', listProducts);

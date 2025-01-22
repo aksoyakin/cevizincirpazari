@@ -27,6 +27,13 @@ const Cart = () => {
         }
     }, [cartItems, products])
 
+    const calculatePrice = (productData, size) => {
+        const sizePrice = productData.sizePrices.find(
+            (sp) => Number(sp.size) === Number(size)
+        );
+        return sizePrice ? sizePrice.price : productData.basePrice;
+    };
+
     return (
         <div className={"border-t pt-14"}>
             <div className={"text-2xl mb-3"}>
@@ -50,7 +57,7 @@ const Cart = () => {
                                     <div>
                                         <p className={"text-xs sm:text-lg font-medium"}> {productData.name} </p>
                                         <div className={"flex items-center gap-5 mt-2"}>
-                                            <p> {currency} {productData.price} </p>
+                                            <p> {currency} {calculatePrice(productData, item.size)} </p>
                                             <p className={"px-2 sm:px-3 sm:ppy-1 border bg-slate-50"}> {item.size} </p>
                                         </div>
                                     </div>

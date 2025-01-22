@@ -43,10 +43,10 @@ const Collection = () => {
         let filterProductsCopy = filterProducts.slice();
         switch (sortType) {
             case 'low-high':
-                setFilterProducts(filterProductsCopy.sort((a,b) => (a.price - b.price)));
+                setFilterProducts(filterProductsCopy.sort((a,b) => (a.basePrice - b.basePrice)));
                 break;
             case 'high-low':
-                setFilterProducts(filterProductsCopy.sort((a,b) => (b.price - a.price)));
+                setFilterProducts(filterProductsCopy.sort((a,b) => (b.basePrice - a.basePrice)));
                 break;
             default:
                  applyFilter();
@@ -136,7 +136,7 @@ const Collection = () => {
                                 key={index}
                                 name={item.name}
                                 id={item._id}
-                                price={item.price}
+                                price={item.basePrice}
                                 image={item.image}
                             />
                         ))

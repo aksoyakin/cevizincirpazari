@@ -53,13 +53,13 @@ const Orders = ({token}) => {
                             <div>
                                 {order.items.map((item, index) => {
                                     if (index === order.items.length - 1) {
-                                        return <p className={"py-0.5"} key={index}> {item.name} x {item.quantity}
-                                            <span> {item.size} </span>
+                                        return <p className={"py-0.5"} key={index}> {item.name} - {item.quantity} adet
+                                            <span> {item.size} KG </span>
                                         </p>
 
                                     } else {
-                                        return <p className={"py-0.5"} key={index}> {item.name} x {item.quantity}
-                                            <span> {item.size} </span> , </p>
+                                        return <p className={"py-0.5"} key={index}> {item.name} - {item.quantity} adet
+                                            <span> {item.size} KG </span> , </p>
                                     }
                                 })}
                             </div>
@@ -71,7 +71,7 @@ const Orders = ({token}) => {
                             <p>{order.address.phone}</p>
                         </div>
                         <div>
-                            <p className={"text-sm sm:text-[15px]"}>Items : {order.items.length}</p>
+                            <p className={"text-sm sm:text-[15px]"}>Ürün Adeti : {order.items.length}</p>
                             <p className={"mt-3"}>Ödeme Yöntemi : {order.paymentMethod}</p>
                             <p>Payment : {order.payment ? 'Done' : 'Pending'}</p>
                             <p>Date : {new Date(order.date).toLocaleDateString()}</p>

@@ -1,10 +1,10 @@
-import { v2 as cloudinary } from 'cloudinary';
+//import { v2 as cloudinary } from 'cloudinary';
 import productModel from "../models/ProductModel.js";
 
-// Add product
+
 const addProduct = async (req, res) => {
     try {
-        const { name, description, price, category, subCategory, sizes, bestseller } = req.body;
+        const { name, description, basePrice, category, subCategory, sizes, bestseller } = req.body;
         const image1 = req.files.image1 && req.files.image1[0];
         const image2 = req.files.image2 && req.files.image2[0];
         const image3 = req.files.image3 && req.files.image3[0];
@@ -12,27 +12,37 @@ const addProduct = async (req, res) => {
 
         const images = [image1, image2, image3, image4].filter((item) => item !== undefined);
 
-        // upload images to cloudinary
+        //upload images with multer
+        const imagesUrl = images.map(item => `/assets/${item.filename}`)
+
+        /* upload images to cloudinary
         let imagesUrl = await Promise.all(
             images.map(async (item) => {
                 let result = await cloudinary.uploader.upload(item.path, {resource_type: 'image'});
                 return result.secure_url;
             })
         )
+        */
 
-        console.log(name, description, price, category, subCategory, sizes, bestseller);
+        console.log(name, description, basePrice, category, subCategory, sizes, bestseller);
         console.log(imagesUrl);
+
+        const sizePrices = sizes.map(size => ({
+            size,
+            price: basePrice * size
+        }))
 
         const productData = {
             name,
             description,
             category,
-            price: Number(price),
+            basePrice: Number(basePrice),
             subCategory,
             bestseller: bestseller === "true" ? true : false,
-            sizes: JSON.parse(sizes),
+            sizes,
             image: imagesUrl,
-            date: Date.now()
+            date: Date.now(),
+            sizePrices
         }
         console.log(productData);
 
