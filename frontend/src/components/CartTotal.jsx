@@ -1,10 +1,9 @@
-import {ShopContext} from "../context/ShopContext.jsx";
-import {useContext} from "react";
+import { ShopContext } from "../context/ShopContext.jsx";
+import { useContext } from "react";
 import Title from "./Title.jsx";
 
-const CartTotal = () => {
-
-    const {currency, deliveryFee, getCartAmount} = useContext(ShopContext);
+const CartTotal = ({ isBelowMinimum }) => {
+    const { currency, deliveryFee, getCartAmount } = useContext(ShopContext);
 
     return (
         <div className={"w-full"}>
@@ -30,6 +29,12 @@ const CartTotal = () => {
                     <b> {currency} {getCartAmount() === 0 ? 0 : getCartAmount() + deliveryFee}.00 </b>
                 </div>
             </div>
+
+            {isBelowMinimum && (
+                <p className="text-red-500 text-sm mt-4">
+                    Sepet tutarı minimum 1000 TL olmalıdır. Lütfen daha fazla ürün ekleyin.
+                </p>
+            )}
         </div>
     );
 };
