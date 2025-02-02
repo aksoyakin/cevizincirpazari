@@ -59,6 +59,28 @@ const PlaceOrder = () => {
                 }
             }
         }
+        const userBasket = Object.entries(cartItems).map(([id, sizes]) => {
+            const product = products.find(p => p._id === id);
+            if (!product) return null;
+
+            // Find the price for each size
+            return Object.entries(sizes)
+                .map(([size, quantity]) => {
+                    const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === size);
+                    const price = sizePrice ? sizePrice.price : product.basePrice;  // Fallback to basePrice
+
+                    return [
+                        product.name,                 // Product name
+                        price.toString(),             // Product price (as string)
+                        quantity                      // Product quantity
+                    ];
+                })
+                .filter(item => item !== null);
+        }).filter(item => item !== null).flat();
+
+        const userBasketBase64 = btoa(JSON.stringify(userBasket));
+
+
         const paymentData = {
 
             email: formData.email,
@@ -68,28 +90,7 @@ const PlaceOrder = () => {
             user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
             user_phone: formData.phone,
             user_ip: ip,
-            user_basket: btoa(JSON.stringify(
-                Object.entries(cartItems)
-                    .map(([id, sizes]) => {
-                        const product = products.find(p => p._id === id);
-                        if (!product) return null; // Skip if the product is not found
-
-                        return Object.entries(sizes)
-                            .map(([size, quantity]) => {
-                                if (product && product.price !== undefined) {
-                                    return [
-                                        product.name,                   // Product name
-                                        product.price.toString(),        // Product price as string
-                                        quantity                         // Product quantity
-                                    ];
-                                }
-                                return null; // If product or price is undefined, return null
-                            })
-                            .filter(item => item !== null); // Filter out null entries
-                    })
-                    .filter(item => item !== null) // Filter out null entries from cartItems
-                    .flat() // Flatten the array into a single array of product details
-            ))
+            user_basket: userBasketBase64
         };
 
         try {
