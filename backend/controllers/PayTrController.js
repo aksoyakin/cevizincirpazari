@@ -1,8 +1,8 @@
 import { getPaytrToken, validatePaytrCallback } from "../services/PayTrService.js";
 import {render} from "ejs";
-import orderModel from "../models/orderModel.js";
+import orderModel from "../models/OrderModel.js";
 import {response} from "express";
-import userModel from "../models/userModel.js";
+import userModel from "../models/UserModel.js";
 
 // PayTR Token isteği
 export const requestPaytrToken = async (req, res) => {
