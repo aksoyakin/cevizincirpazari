@@ -1,6 +1,6 @@
 import express from 'express';
 import {handlePaytrCallback, requestPaytrToken} from '../controllers/PayTrController.js';
-import authUser from "../middleware/auth.js";
+import authUser from "../middleware/Auth.js";
 
 const paytrRouter = express.Router();
 
