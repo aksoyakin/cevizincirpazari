@@ -59,26 +59,29 @@ const PlaceOrder = () => {
                 }
             }
         }
-        const userBasket = Object.entries(cartItems).map(([id, sizes]) => {
-            const product = products.find(p => p._id === id);
-            if (!product) return null;
+        const userBasket = Object.entries(cartItems)
+            .map(([id, sizes]) => {
+                const product = products.find(p => p._id === id);
+                if (!product) return null;
 
-            // Find the price for each size
-            return Object.entries(sizes)
-                .map(([size, quantity]) => {
-                    const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === size);
-                    const price = sizePrice ? sizePrice.price : product.basePrice;  // Fallback to basePrice
+                return Object.entries(sizes)
+                    .map(([size, quantity]) => {
+                        const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === parseInt(size));
+                        const price = sizePrice ? sizePrice.price : product.basePrice;
 
-                    return [
-                        product.name,                 // Product name
-                        price.toString(),             // Product price (as string)
-                        quantity                      // Product quantity
-                    ];
-                })
-                .filter(item => item !== null);
-        }).filter(item => item !== null).flat();
+                        return [
+                            product.name,                 // Ürün adı
+                            price.toString(),             // Ürün fiyatı (string olarak)
+                            quantity                      // Ürün adedi
+                        ];
+                    })
+                    .filter(item => item !== null);
+            })
+            .filter(item => item !== null)
+            .flat();
 
         const userBasketBase64 = btoa(JSON.stringify(userBasket));
+
 
 
         const paymentData = {
