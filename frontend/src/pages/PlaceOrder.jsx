@@ -1,12 +1,19 @@
 import Title from "../components/Title.jsx";
 import CartTotal from "../components/CartTotal.jsx";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ShopContext} from "../context/ShopContext.jsx";
 import axios from "axios";
 import {toast} from "react-toastify";
 
 const PlaceOrder = () => {
     const [method, setMethod] = useState("HAVALE/EFT");
+    const [ip, setIp] = useState("");
+    useEffect(() => {
+        fetch("https://api64.ipify.org?format=json")
+            .then((res) => res.json())
+            .then((data) => setIp(data.ip));
+    }, []);
+
     const {
         navigate,
         backendUrl,
@@ -38,8 +45,58 @@ const PlaceOrder = () => {
 
         setFormData(data => ({...data, [name]: value}))
     }
+    const handlePayment = async () => {
+        let orderItems2 = []
+        for (const items in cartItems) {
+            for (const item in cartItems[items]) {
+                if (cartItems[items][item] > 0) {
+                    const itemInfo = structuredClone(products.find(product => product._id === items));
+                    if (itemInfo) {
+                        itemInfo.size = item
+                        itemInfo.quantity = cartItems[items][item];
+                        orderItems2.push(itemInfo);
+                    }
+                }
+            }
+        }
+        const paymentData = {
+
+            email: formData.email,
+            payment_amount: (getCartAmount() + deliveryFee) * 100,
+            user_name: `${formData.firstName} ${formData.lastName}`,
+            user_address: formData,
+            //user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
+            user_phone: formData.phone,
+            user_ip: ip,
+            user_basket: orderItems2,
+        };
+
+        try {
+            const response = await fetch(backendUrl + '/api/paytr/get-token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', token: token },
+                body: JSON.stringify(paymentData),
+            });
+
+            const textResponse = await response.text();
+            try {
+                const data = JSON.parse(textResponse);
+                window.open(backendUrl + `/paytr/payment?token=${data.token}`, '_blank');
+            } catch (error) {
+                console.error("Yanıt JSON formatında değil:", error);
+                console.error("Backend'den gelen yanıt (HTML):", textResponse);
+            }
+        } catch (error) {
+            console.error('Bir hata oluştu:', error);
+        }
+    };
     const onSubmitHandler = async (event) => {
         event.preventDefault();
+        if (!token) {
+            toast.error("Lütfen giriş yapınız.");
+            navigate('/login');
+            return; // Eğer token yoksa işlemi durdur
+        }
         try {
             let orderItems = [];
             for (const items in cartItems) {
@@ -63,7 +120,7 @@ const PlaceOrder = () => {
                 // api calls for cod
                 case 'HAVALE/EFT': {
                     const response = await axios.post(backendUrl + '/api/order/place', orderData, {headers: {token}});
-                    console.log(response.data);
+                    //console.log(response.data);
 
                     if (response.data.success) {
                         setCartItems({});
@@ -74,12 +131,17 @@ const PlaceOrder = () => {
                     }
                     break;
                 }
+                case "paytr":
+                {
+                    await handlePayment();
+                    break;
+                }
 
                 default:
                     break;
             }
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             toast.error(error.message);
         }
     }
@@ -227,6 +289,10 @@ const PlaceOrder = () => {
                              className={"flex items-center gap-3 border p-2 px-3 cursor-pointer"}>
                             <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'HAVALE/EFT' ? 'bg-green-400' : ''}`}></p>
                             <p className={"text-gray-800 text-sm font-medium mx-4"}>HAVALE / EFT</p>
+                        </div>
+                        <div onClick={() => setMethod('paytr')} className="flex items-center gap-3 border p-2 px-3 cursor-pointer">
+                            <p className={`min-w-3.5 h-3.5 border rounded-full ${method === 'paytr' ? 'bg-green-400' : ''}`}></p>
+                            <p className="text-gray-800 text-sm font-medium mx-4">KREDİ/BANKA KARTI</p>
                         </div>
                     </div>
                     {method === "HAVALE/EFT"
