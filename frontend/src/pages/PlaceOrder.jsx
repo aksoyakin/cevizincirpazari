@@ -64,11 +64,19 @@ const PlaceOrder = () => {
             email: formData.email,
             payment_amount: (getCartAmount() + deliveryFee) * 100,
             user_name: `${formData.firstName} ${formData.lastName}`,
-            user_address: formData,
-            //user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
+            //user_address: formData,
+            user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
             user_phone: formData.phone,
             user_ip: ip,
-            user_basket: orderItems2,
+            user_basket: JSON.stringify(Object.entries(cartItems).map(([id, sizes]) => {
+                const product = products.find(p => p._id === id);
+                return Object.entries(sizes).map(([size, quantity]) => [
+                    product.name,
+                   // product.size,
+                    product.price,
+                    quantity
+                ]);
+            }))
         };
 
         try {
