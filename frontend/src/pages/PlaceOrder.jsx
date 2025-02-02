@@ -66,13 +66,15 @@ const PlaceOrder = () => {
 
                 return Object.entries(sizes)
                     .map(([size, quantity]) => {
-                        const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === parseInt(size));
-                        const price = sizePrice ? sizePrice.price : product.basePrice;
+                        if (quantity <= 0) return null; //
+
+                        const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === size);
+                        const price = sizePrice ? sizePrice.price : product.basePrice; // Fallback to basePrice
 
                         return [
-                            product.name,                 // Ürün adı
-                            price.toString(),             // Ürün fiyatı (string olarak)
-                            quantity                      // Ürün adedi
+                            `${product.name} - ${size}`, // Ürün Adı (Örn: "X Marka 36 Numara Kırmızı Ayakkabı")
+                            price.toFixed(2).toString(), // Fiyat (Örn: "199.99")
+                            quantity // Adet (integer)
                         ];
                     })
                     .filter(item => item !== null);
@@ -80,8 +82,9 @@ const PlaceOrder = () => {
             .filter(item => item !== null)
             .flat();
 
-        const userBasketBase64 = btoa(JSON.stringify(userBasket));
-
+        const userBasketBase64 = userBasket.length > 0
+            ? btoa(JSON.stringify(userBasket))
+            : btoa(JSON.stringify([["Boş Sepet", "0.00", 1]]));
 
 
         const paymentData = {
