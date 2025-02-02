@@ -68,15 +68,28 @@ const PlaceOrder = () => {
             user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
             user_phone: formData.phone,
             user_ip: ip,
-            user_basket: JSON.stringify(Object.entries(cartItems).map(([id, sizes]) => {
-                const product = products.find(p => p._id === id);
-                return Object.entries(sizes).map(([size, quantity]) => [
-                    product.name,
-                   // product.size,
-                    product.price,
-                    quantity
-                ]);
-            }))
+            user_basket: btoa(JSON.stringify(
+                Object.entries(cartItems)
+                    .map(([id, sizes]) => {
+                        const product = products.find(p => p._id === id);
+                        if (!product) return null; // Skip if the product is not found
+
+                        return Object.entries(sizes)
+                            .map(([size, quantity]) => {
+                                if (product && product.price !== undefined) {
+                                    return [
+                                        product.name,                   // Product name
+                                        product.price.toString(),        // Product price as string
+                                        quantity                         // Product quantity
+                                    ];
+                                }
+                                return null; // If product or price is undefined, return null
+                            })
+                            .filter(item => item !== null); // Filter out null entries
+                    })
+                    .filter(item => item !== null) // Filter out null entries from cartItems
+                    .flat() // Flatten the array into a single array of product details
+            ))
         };
 
         try {
