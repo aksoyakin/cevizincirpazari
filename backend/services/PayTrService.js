@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import fetch from 'node-fetch';
-import orderModel from "../models/orderModel.js";
+import orderModel from "../models/OrderModel.js";
 
 export const getPaytrToken = async (paymentData) => {
     try {
