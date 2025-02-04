@@ -46,45 +46,23 @@ const PlaceOrder = () => {
         setFormData(data => ({...data, [name]: value}))
     }
     const handlePayment = async () => {
-        let orderItems2 = []
-        for (const items in cartItems) {
-            for (const item in cartItems[items]) {
-                if (cartItems[items][item] > 0) {
-                    const itemInfo = structuredClone(products.find(product => product._id === items));
-                    if (itemInfo) {
-                        itemInfo.size = item
-                        itemInfo.quantity = cartItems[items][item];
-                        orderItems2.push(itemInfo);
-                    }
-                }
-            }
-        }
         const userBasket = Object.entries(cartItems)
-            .map(([id, sizes]) => {
+            .flatMap(([id, sizes]) => {
                 const product = products.find(p => p._id === id);
-                if (!product) return null;
+                if (!product) return [];
 
                 return Object.entries(sizes)
+                    .filter(([, quantity]) => quantity > 0)
                     .map(([size, quantity]) => {
-                        if (quantity <= 0) return null; //
+                        const sizePrice = product.sizePrices.find(sp => sp.size === size);
+                        const price = (sizePrice?.price ?? product.basePrice).toFixed(2);
+                        return [`${product.name} - ${size}`, price, quantity];
+                    });
+            });
 
-                        const sizePrice = product.sizePrices.find(sizePrice => sizePrice.size === size);
-                        const price = sizePrice ? sizePrice.price : product.basePrice; // Fallback to basePrice
-
-                        return [
-                            `${product.name} - ${size}`, // Ürün Adı (Örn: "X Marka 36 Numara Kırmızı Ayakkabı")
-                            price.toFixed(2).toString(), // Fiyat (Örn: "199.99")
-                            quantity // Adet (integer)
-                        ];
-                    })
-                    .filter(item => item !== null);
-            })
-            .filter(item => item !== null)
-            .flat();
-
-        const userBasketBase64 = userBasket.length > 0
-            ? btoa(JSON.stringify(userBasket))
-            : btoa(JSON.stringify([["Boş Sepet", "0.00", 1]]));
+        const userBasketBase64 = btoa(JSON.stringify(
+            userBasket.length > 0 ? userBasket : [["Boş Sepet", "0.00", 1]]
+        ));
 
 
         const paymentData = {
