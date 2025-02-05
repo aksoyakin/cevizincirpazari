@@ -26,7 +26,7 @@ export const getPaytrToken = async (paymentData) => {
         const merchant_ok_url = process.env.MERCHANT_OK_URL;
         const merchant_fail_url = process.env.MERCHANT_FAIL_URL;
         const timeout_limit = 30;
-        const debug_on = 1;
+        const debug_on = 0;
         const lang = 'tr';
 
         // Hash string oluşturuluyor
