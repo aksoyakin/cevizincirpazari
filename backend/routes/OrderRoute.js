@@ -2,6 +2,7 @@ import express from 'express';
 import {placeOrder, placeOrderStripe, placeOrderRazorpay, allOrders, userOrders, updateStatus} from '../controllers/OrderController.js';
 import adminAuth from "../middleware/AdminAuth.js";
 import authUser from "../middleware/Auth.js";
+import {updatePayTrOrderItemsAndAddress} from "../controllers/PayTrController.js";
 
 const orderRouter = express.Router();
 
@@ -16,5 +17,6 @@ orderRouter.post("/razorpay", authUser, placeOrderRazorpay);
 
 // user feature
 orderRouter.post("/userorders", authUser, userOrders);
+orderRouter.put("/update-paytr-order", authUser, updatePayTrOrderItemsAndAddress);
 
 export default orderRouter;

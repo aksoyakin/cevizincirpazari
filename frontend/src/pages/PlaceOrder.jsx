@@ -140,6 +140,16 @@ const PlaceOrder = () => {
                 case "paytr":
                 {
                     await handlePayment();
+                    const updateResponse = await fetch(backendUrl + '/api/order/update-paytr-order', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', token: token },
+                        body: JSON.stringify({
+                            address: formData, // Object formatında adres
+                            items: orderItems // Array formatında ürünler
+                        }),
+                    });
+
+                    if (!updateResponse.ok) throw new Error('Sipariş güncellenemedi');
                     break;
                 }
 
