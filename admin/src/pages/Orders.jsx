@@ -76,7 +76,7 @@ const Orders = ({token}) => {
                             <p>Payment : {order.payment ? 'Done' : 'Pending'}</p>
                             <p>Date : {new Date(order.date).toLocaleDateString()}</p>
                         </div>
-                        <p className={"text-sm sm:text-[15px]"}>{currency} {order.amount}</p>
+                        <p className={"text-sm sm:text-[15px]"}>{currency} {order.paymentMethod === "PayTR" ? (order.amount / 100) : order.amount}</p>
                         <select onChange={(event) => statusHandler(event, order._id)} value={order.status}
                                 className={"p-2 font-semibold"}>
                             <option value="Siparişiniz Alındı">Siparişiniz Alındı</option>

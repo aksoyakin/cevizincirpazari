@@ -11,6 +11,7 @@ export const ShopContext = createContext();
 const ShopContextProvider = (props) => {
     const currency = '₺';
     const deliveryFee = 90;
+    const freeShippingThreshold = 3000;
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const [search, setSearch] = useState("");
     const [showSearch, setShowSearch] = useState(false);
@@ -102,6 +103,11 @@ const ShopContextProvider = (props) => {
         return totalAmount;
     };
 
+    const getShippingFee = () => {
+        const cartAmount = getCartAmount();
+        return cartAmount >= freeShippingThreshold ? 0 : deliveryFee;
+    };
+
 
     // get products from backend
     const getProductsData = async () => {
@@ -142,13 +148,25 @@ const ShopContextProvider = (props) => {
     },[])
 
     const value = {
-        products, currency, deliveryFee,
-        search,setSearch,showSearch,setShowSearch,
-        cartItems, addToCart,
-        getCartCount, updateQuantity,
-        getCartAmount, navigate, backendUrl,
-        setToken, token,
-        setCartItems
+        products,
+        currency,
+        deliveryFee,
+        search,
+        setSearch,
+        showSearch,
+        setShowSearch,
+        cartItems,
+        addToCart,
+        getCartCount,
+        updateQuantity,
+        getCartAmount,
+        getShippingFee,
+        navigate,
+        backendUrl,
+        setToken,
+        token,
+        setCartItems,
+        freeShippingThreshold,
     }
 
     return (

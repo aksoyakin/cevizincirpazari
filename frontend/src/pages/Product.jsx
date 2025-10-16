@@ -12,6 +12,7 @@ const Product = () => {
     const [size, setSize] = useState("");
     const navigate = useNavigate();
     const [selectedPrice, setSelectedPrice] = useState(0);
+    const isOutOfStock = productData && typeof productData.stock === "number" ? productData.stock <= 0 : false;
 
     const fetchProductData = async () => {
         products.map((item) => {
@@ -24,11 +25,16 @@ const Product = () => {
         })
     }
 
-    const handleSizeChange = (selectedSize) => {
+    const handleSizeChange = (event) => {
+        const selectedSize = event.target.value;
         setSize(selectedSize);
-        const sizePrice = productData.sizePrices.find(
+        if (!selectedSize) {
+            setSelectedPrice(productData.basePrice);
+            return;
+        }
+        const sizePrice = productData.sizePrices?.find(
             (sp) => Number(sp.size) === Number(selectedSize)
-        )
+        );
         if (sizePrice) {
             setSelectedPrice(sizePrice.price);
         } else {
@@ -83,25 +89,36 @@ const Product = () => {
                     <p className={"mt-5 text-gray-500 md:w-4/5"}> {productData.description} </p>
                     <div className={"flex flex-col gap-4 my-8 italic"}>
                         <p>(300 KG ve üstü toplu alımlar için iletişime geçebilirsiniz)</p>
-                        <div className={"flex gap-2"}>
-                            {productData.sizes.map((item, index) => (
-                                <button
-                                    onClick={() => handleSizeChange(item)}
-                                    className={`border py-2 px-4 bg-gray-100 ${item === size ? 'border-orange-500' : ''}`} key={index}> {item} KG </button>
-                            ))}
+                        <div>
+                            <select
+                                value={size}
+                                onChange={handleSizeChange}
+                                className={"border py-2 px-4 bg-gray-100"}
+                            >
+                                <option value={""} disabled>Kg Seçiniz</option>
+                                {productData.sizes.map((item, index) => (
+                                    <option key={index} value={item}>
+                                        {item} KG
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
-
+                    {isOutOfStock && (
+                        <p className={"text-red-500 font-semibold mb-2"}>Stok tükendi</p>
+                    )}
                     <button
                         onClick={() => {
+                            if (isOutOfStock) return;
                             addToCart(productData._id, size);
                             if(size.length > 0){
                                 navigate('/cart');
                             }
                         }}
-                        className={"bg-orange-500 text-white px-10 py-4 text-sm active:bg-gray-700"}
+                        disabled={isOutOfStock}
+                        className={`${isOutOfStock ? "bg-gray-400 cursor-not-allowed" : "bg-orange-500 active:bg-gray-700"} text-white px-10 py-4 text-sm`}
                     >
-                        SEPETE EKLE
+                        {isOutOfStock ? "STOK TÜKENDİ" : "SEPETE EKLE"}
                     </button>
                     <hr className={"mt-8 sm:w-4/5"}/>
                     <div className={"text-sm text-gray-500 mt-5 flex flex-col gap-1"}>

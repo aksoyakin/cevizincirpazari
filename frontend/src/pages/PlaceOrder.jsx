@@ -21,7 +21,7 @@ const PlaceOrder = () => {
         cartItems,
         setCartItems,
         getCartAmount,
-        deliveryFee,
+        getShippingFee,
         products
     } = useContext(ShopContext);
     const [formData, setFormData] = useState({
@@ -65,10 +65,12 @@ const PlaceOrder = () => {
         ));
 
 
-        const paymentData = {
+        const cartAmount = getCartAmount();
+        const shippingFee = getShippingFee();
 
+        const paymentData = {
             email: formData.email,
-            payment_amount: (getCartAmount() + deliveryFee) * 100,
+            payment_amount: (cartAmount + shippingFee) * 100,
             user_name: `${formData.firstName} ${formData.lastName}`,
             //user_address: formData,
             user_address: `${formData.street}, ${formData.city}, ${formData.state}, ${formData.zipcode}, ${formData.country}`,
@@ -104,6 +106,8 @@ const PlaceOrder = () => {
             return; // Eğer token yoksa işlemi durdur
         }
         try {
+            const cartAmount = getCartAmount();
+            const shippingFee = getShippingFee();
             let orderItems = [];
             for (const items in cartItems) {
                 for (const item in cartItems[items]) {
@@ -120,7 +124,7 @@ const PlaceOrder = () => {
             let orderData = {
                 address: formData,
                 items: orderItems,
-                amount: getCartAmount() + deliveryFee,
+                amount: cartAmount + shippingFee,
             }
             switch (method) {
                 // api calls for cod

@@ -30,8 +30,8 @@ const Footer = () => {
 
             <div>
                 <hr />
-                <p className={"text-sm text-center"}>2025 @ Tüm Hakları Saklıdır.</p>
-                <p className={"text-sm italic text-gray-500 text-center"}>Design & Developed by <a href={"https://www.linkedin.com/in/aksoyakin/"}>Akin Aksoy</a> & <a href={"https://www.linkedin.com/in/birgulkurtcu/"}>Birgül Kurtçu</a> </p>
+                <span className={"text-sm text-center"}>2026 @ Tüm Hakları Saklıdır.</span>{" "}
+                <span className={"text-sm text-gray-500 text-center"}>Design & Developed by <a href={"https://www.voyira.com"}><span className={"font-bold"}>voyira.</span></a></span>
             </div>
         </div>
     );
